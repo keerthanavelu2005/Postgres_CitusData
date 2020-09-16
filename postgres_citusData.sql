@@ -1,16 +1,4 @@
-# Add Citus repository for package manager
-curl https://install.citusdata.com/community/deb.sh | sudo bash
-
-# install the server and initialize db
-sudo apt-get -y install postgresql-12-citus-9.4
-
-
-#To download sample data
-
-curl https://examples.citusdata.com/tutorial/companies.csv > companies.csv 
-
-curl https://examples.citusdata.com/tutorial/campaigns.csv > campaigns.csv
-
+#After installtion:
 
 # this user has access to sockets in /var/run/postgresql
 sudo su - postgres
@@ -34,7 +22,7 @@ echo "shared_preload_libraries = 'citus'" >> citus/slave1/postgresql.conf
 echo "shared_preload_libraries = 'citus'" >> citus/slave2/postgresql.conf
 
 
-Let’s start the server
+#Let’s start the server:
 /usr/lib/postgresql/12/bin/pg_ctl -D /var/lib/postgresql/citus/master start
  
 /usr/lib/postgresql/12/bin/pg_ctl -D /var/lib/postgresql/citus/sslave1 start
@@ -90,21 +78,21 @@ CREATE TABLE campaigns (
 );
 
 
-// To distribute the tables in the worker nodes
+# To distribute the tables in the worker nodes
 
 SELECT create_distributed_table('companies', 'id');
 
 SELECT create_distributed_table('campaigns', 'company_id');
 
 
-// load the data into the tables using \copy command
+#load the data into the tables using \copy command
 
 \copy companies from '/home/keerthana/Downloads/companies.csv' with csv
 \copy campaigns from '/home/keerthana/Downloads/campaigns.csv' with csv
 
 
 
-// sample queries
+#sample queries
 
 1.INSERT INTO companies VALUES (5000, 'New Company', 'https://randomurl/image.png', now(), now());
 
